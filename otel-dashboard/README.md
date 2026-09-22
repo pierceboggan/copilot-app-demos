@@ -2,7 +2,11 @@
 
 Point Copilot at a collector, get a Grafana dashboard showing token spend, model latency, tool behaviour, and how much code the agent is actually writing.
 
-![pipeline](https://img.shields.io/badge/OTLP-collector%20%E2%86%92%20Prometheus%20%2B%20Tempo%20%E2%86%92%20Grafana-blue)
+![Copilot agent overview dashboard](media/dashboard-overview.png)
+
+*Real data from a live run: Copilot app sessions and CLI runs across four models. Every number here came out of an actual collector, not a mockup.*
+
+https://github.com/user-attachments/assets/c56ac4c5-f066-4558-aaed-abd31beaa1d8
 
 ## Run it
 
@@ -31,16 +35,26 @@ docker compose logs -f collector
 
 ```bash
 cd local
+./run-stack.sh          # downloads and starts everything
+./run-stack.sh stop
+```
+
+Grafana, Prometheus, Tempo, and the collector all ship standalone binaries, so a laptop with no container runtime runs the same stack on the same ports. The script reuses the committed configs and only rewrites the Compose hostnames to loopback. This is how the screenshots above were captured.
+
+If you only want to see what a client emits, skip the stack entirely:
+
+```bash
+cd local
 ./run-tap.sh
 ```
 
-That downloads a standalone OpenTelemetry Collector, listens on the same `127.0.0.1:4319`, and writes every signal to `captured/*.jsonl`. No Grafana, no Prometheus, just the raw truth about what Copilot sends. It is the fastest way to prove a managed `telemetry` setting is reaching a client, and the right tool when you are debugging why a panel is empty.
+That starts just a collector on `127.0.0.1:4319` and writes every signal to `captured/*.jsonl`. No Grafana, no Prometheus, just the raw truth. It is the fastest way to prove a managed `telemetry` setting is reaching a client, and the right tool when a panel is empty and you need to know whether the data ever arrived.
 
 ```bash
 node summarize-capture.mjs
 ```
 
-prints every span name, every metric, and every label present in a capture. A redacted example capture is in `local/sample-capture/`.
+prints every span name, every metric, and every label present in a capture. A redacted example is in `local/sample-capture/`.
 
 For a single CLI run you do not need managed settings at all:
 
@@ -54,13 +68,36 @@ Four rows, ordered by the question you are most likely to be asking.
 
 **Consumption.** Input and output tokens, model calls, tool calls, tool failure rate, net lines changed. Token throughput is stacked by model and token type, so a model with heavy cache reads looks visibly different from one without.
 
+![Token throughput by model](media/panel-token-throughput.png)
+
 **Responsiveness.** Time to first chunk at p95 broken out by model, which is the latency users actually perceive, alongside end-to-end agent invocation duration. Those two diverging usually means tool execution rather than the model.
 
+![Model call latency](media/panel-latency.png)
+
 **Tools and MCP.** Busiest tools, a table pairing p95 duration with failure count, and MCP connection outcomes over time. A rising MCP failure line is much more often a managed allowlist or a credential problem than a flaky server.
+
+![Tool latency and failures](media/panel-tool-table.png)
 
 **Code impact.** Lines added and removed by model, recorded live by the editing tools rather than inferred from commits.
 
 Two template variables filter everything: model, and client version. Client version is useful during a rollout.
+
+<details>
+<summary>Full dashboard, all four rows</summary>
+
+![Full dashboard](media/dashboard-full.png)
+
+</details>
+
+## Reproducing the screenshots
+
+The stack runs fine without Docker, which is how the media above was captured: Grafana, Prometheus, Tempo, and the collector all ship standalone binaries. `local/capture-dashboard.mjs` then drives Chromium through Playwright to take the screenshots and record the walkthrough.
+
+```bash
+node local/capture-dashboard.mjs ./media
+```
+
+It waits on Grafana's own panel-ready signal rather than sleeping, so it does not race the queries.
 
 ## The metric names are real
 
@@ -174,9 +211,12 @@ Then add `filter/drop_timing` to the traces pipeline ahead of `batch`.
 | `tempo.yaml` | Single-binary Tempo with local storage |
 | `grafana/dashboards/copilot-agent-overview.json` | The dashboard |
 | `grafana/provisioning/` | Datasource and dashboard provisioning |
-| `local/run-tap.sh` | Standalone collector, no Docker |
+| `local/run-stack.sh` | Whole stack, standalone binaries, no Docker |
+| `local/run-tap.sh` | Collector only, for seeing raw signals |
+| `local/capture-dashboard.mjs` | Screenshots and video via Playwright |
 | `local/summarize-capture.mjs` | Summarize a capture |
 | `local/sample-capture/` | Redacted example of what Copilot sends |
+| `media/` | Screenshots and walkthrough used in this README |
 
 ## Reference
 

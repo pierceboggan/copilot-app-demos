@@ -39,7 +39,7 @@ To undo it: `./enterprise-managed-settings/deploy/uninstall-macos.sh`.
 
 ```bash
 cd otel-dashboard
-docker compose up -d
+docker compose up -d          # or: cd local && ./run-stack.sh
 
 cd ../enterprise-managed-settings/deploy
 ./install-macos.sh ../scenarios/07-otel-telemetry.json
@@ -48,11 +48,15 @@ cd ../enterprise-managed-settings/deploy
 open http://localhost:3000
 ```
 
-No Docker? `otel-dashboard/local/run-tap.sh` downloads a standalone collector, listens on the same port, and writes every signal to a file you can read.
+![Copilot agent overview dashboard](otel-dashboard/media/dashboard-overview.png)
+
+No Docker? `otel-dashboard/local/run-stack.sh` runs the identical stack from standalone binaries, and `run-tap.sh` starts just a collector that writes every signal to a file you can read.
 
 ## Where the demo data comes from
 
 Every metric name, label, and span attribute used in the dashboard was taken from a real capture on a real machine, not from the reference tables. The capture script and a redacted sample are in [`otel-dashboard/local/`](otel-dashboard/local/). That matters because a handful of the documented names turned out to be wrong, and a dashboard built from the docs would have rendered empty panels.
+
+The whole thing was then run end to end against a live stack. The screenshots are that run. Doing it caught two bugs that every static check had passed: a Prometheus cardinality problem that merged per-session counters and inflated totals fivefold, and a `NaN` column in the tool table. Details in [VALIDATION.md](enterprise-managed-settings/VALIDATION.md#running-it-end-to-end).
 
 ## Requirements
 

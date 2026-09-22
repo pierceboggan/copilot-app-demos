@@ -196,6 +196,58 @@ On `execute_tool`: `github.copilot.tool.parameters.skill_name`, `github.copilot.
 
 A `session.provisioning` span and a large family of `session.timing.*` spans, each carrying phase, ordinal, start offset, and duration. These come from the app and describe how long each stage of session startup took. Handy for diagnosing a slow app, noisy for anything else, and worth filtering out at the collector if you are paying per span.
 
+## Running it end to end
+
+The findings above came from inspecting signals. Building the dashboard on top of them and actually running it surfaced two more problems, neither of which any static check caught: the collector config validated, the dashboard JSON parsed, and every metric name was correct.
+
+Setup was the full stack from standalone binaries (`otel-dashboard/local/run-stack.sh`), a file-based `telemetry` policy, and a scripted workload of real `copilot -p` runs across `claude-haiku-4.5`, `claude-sonnet-5`, and `gpt-5.6-sol`, with the CLI's own reported token counts kept as ground truth.
+
+### The pipeline is accurate, once it is right
+
+Raw counters matched the CLI's own reported usage exactly:
+
+| Model | CLI reported | Prometheus counter |
+| --- | --- | --- |
+| `claude-sonnet-5` | 111.1k input | 111,107 |
+| `gpt-5.6-sol` | 26.6k input | 26,641 |
+| `claude-haiku-4.5` | 32.9k + 32.6k | 65,531 |
+
+### Dropping a resource attribute from cumulative metrics corrupts the totals
+
+`resource_to_telemetry_conversion` promotes `agency.session_id` to a Prometheus label, and since it is a fresh UUID per session it multiplies series without bound. The obvious fix is to delete the attribute. That is wrong, and quietly so.
+
+Copilot exports **cumulative** counters, one independent stream per session. Strip the only attribute distinguishing them and the streams collapse onto a single label set whose value jumps around as sessions interleave. Every downward jump reads as a counter reset, so `increase()` re-counts the series from zero each time:
+
+```
+raw counter        21,531,614
+increase() [12h]  117,572,150     <- 5.5x the counter's own value
+```
+
+The fix is ordering. Convert to delta while the session ID still separates the streams, then drop it, then re-accumulate:
+
+```yaml
+processors: [memory_limiter, cumulative_to_delta, resource/metrics_cardinality, delta_to_cumulative, batch]
+```
+
+Deltas add correctly across sessions, which is precisely the aggregation wanted. After the change `increase()` (4.16M) tracks the raw counter sum (4.07M), and a second workload round was attributed correctly: haiku +31.5k against 32.6k reported, sonnet +46.9k against 44.0k, sol +28.5k against 26.6k. The residual is Prometheus extrapolating to range boundaries, which is expected.
+
+Anyone building a Prometheus pipeline for a short-lived-process exporter hits this. It is worth knowing before it reaches a dashboard someone trusts.
+
+### `histogram_quantile` over unused buckets is NaN
+
+The tool-latency table rendered `NaN` for every registered-but-uncalled tool, because a quantile over all-zero buckets is 0/0. Filtering to tools that actually recorded an observation fixes it:
+
+```promql
+histogram_quantile(0.95, sum by (le, gen_ai_tool_name) (increase(..._bucket[$__range])))
+  and on (gen_ai_tool_name) (sum by (gen_ai_tool_name) (increase(..._count[$__range])) > 0)
+```
+
+### Smaller things the run exposed
+
+* `increase()` over a range far wider than the data over-extrapolates badly. The dashboard defaults to a 3h window rather than 12h.
+* A legend calc of `Total` over a `rate()` series is meaningless, since summing per-second rates depends on scrape interval. Those panels report mean and max instead.
+* Grafana's default thresholds colour any stat at or above 80 red, so "94 model calls" rendered as an alarm. Neutral counters now carry an explicit colour.
+
 ## Reproducing
 
 ```bash
@@ -205,12 +257,21 @@ node validate-managed-settings.mjs --debug    # resolution and channels
 node probe-enforcement.mjs                    # deny / ask / allow
 ```
 
-For the telemetry findings:
+For the telemetry findings, and to reproduce the dashboard screenshots:
+
+```bash
+cd otel-dashboard/local
+./run-stack.sh                                # whole stack, no Docker
+# install scenarios/07-otel-telemetry.json, restart the app, use it
+node capture-dashboard.mjs ../media           # screenshots + walkthrough
+./run-stack.sh stop
+```
+
+To look at raw signals instead of a dashboard:
 
 ```bash
 cd otel-dashboard/local
 ./run-tap.sh                                  # collector on 127.0.0.1:4319
-# install scenarios/07-otel-telemetry.json, restart the app, use it
 node summarize-capture.mjs                    # span names, metrics, labels
 ```
 

@@ -27,21 +27,37 @@ processors:
     limit_percentage: 75
     spike_limit_percentage: 20
 
-  # Cardinality guard, metrics only.
+  # Cardinality guard, metrics only. Order matters here.
   #
   # `resource_to_telemetry_conversion` on the Prometheus exporter promotes every
   # resource attribute to a label, which is what makes `service.version`
   # available for filtering. It also promotes `agency.session_id`, a fresh UUID
-  # per Copilot session, and that produces a brand new time series for every
-  # metric on every session. Seven sessions from one laptop already generate 529
-  # series; an enterprise would take Prometheus down within days.
+  # per Copilot session, so every session mints a brand new time series for
+  # every metric. Seven sessions from one laptop already generate 529 series.
   #
-  # Traces keep the attribute. Correlating spans to a session is exactly what it
-  # is for, and high cardinality is normal and cheap there.
+  # Dropping that attribute on its own is NOT safe. Copilot exports cumulative
+  # counters, one independent stream per session. Strip the only attribute that
+  # tells the streams apart and they collapse onto a single label set whose
+  # value jumps around as sessions interleave. Every jump down reads as a
+  # counter reset, so `increase()` re-counts the whole series each time and
+  # reports totals several times larger than the counter itself.
+  #
+  # So: convert to delta first, while the session ID still separates the
+  # streams; then drop it; then re-accumulate. Deltas add correctly across
+  # sessions, which is exactly the aggregation we want.
+  cumulative_to_delta:
+    include:
+      match_type: regexp
+      metrics:
+        - "gen_ai\\..*"
+        - "github\\.copilot\\..*"
+
   resource/metrics_cardinality:
     attributes:
       - key: agency.session_id
         action: delete
+
+  delta_to_cumulative: {}
 
   # Copilot stamps prompts and tool arguments onto spans only when
   # `captureContent` is true. If you ever turn that on, this is where you would
@@ -74,7 +90,12 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [memory_limiter, resource/metrics_cardinality, batch]
+      processors:
+        - memory_limiter
+        - cumulative_to_delta
+        - resource/metrics_cardinality
+        - delta_to_cumulative
+        - batch
       exporters: [prometheus, debug]
     traces:
       receivers: [otlp]

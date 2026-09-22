@@ -7,6 +7,13 @@ otel-dashboard/local/otelcol-contrib
 otel-dashboard/local/otelcol.tar.gz
 otel-dashboard/local/captured/
 
+# run-stack.sh downloads Grafana, Prometheus, Tempo, and the collector here,
+# and keeps their data and logs alongside. Several hundred MB.
+otel-dashboard/local/.stack/
+
+# Raw Playwright recordings, before they are encoded to mp4.
+otel-dashboard/media/video-raw/
+
 # Scratch output from the validators.
 validate/resolved.json
 validate/probe-tmp.mjs

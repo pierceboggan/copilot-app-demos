@@ -2,20 +2,30 @@
   "uid": "copilot-agent-overview",
   "title": "GitHub Copilot — agent overview",
   "description": "Model cost, latency, and tool behaviour for Copilot agents, built from the OTel GenAI semantic conventions the Copilot runtime emits. Metric and label names were taken from a live capture, not from the docs.",
-  "tags": ["copilot", "opentelemetry", "genai"],
+  "tags": [
+    "copilot",
+    "opentelemetry",
+    "genai"
+  ],
   "timezone": "browser",
   "editable": true,
   "schemaVersion": 39,
   "version": 1,
   "refresh": "30s",
-  "time": { "from": "now-6h", "to": "now" },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
   "templating": {
     "list": [
       {
         "name": "model",
         "label": "Model",
         "type": "query",
-        "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "copilot-prometheus"
+        },
         "query": "label_values(gen_ai_client_token_usage_sum, gen_ai_request_model)",
         "refresh": 2,
         "includeAll": true,
@@ -26,7 +36,10 @@
         "name": "service_version",
         "label": "Client version",
         "type": "query",
-        "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "copilot-prometheus"
+        },
         "query": "label_values(gen_ai_client_token_usage_sum, service_version)",
         "refresh": 2,
         "includeAll": true,
@@ -39,19 +52,45 @@
     {
       "type": "row",
       "title": "Consumption",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
     },
     {
       "type": "stat",
       "title": "Input tokens",
       "description": "Sum of gen_ai.client.token.usage where gen_ai.token.type = input.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 5, "w": 4, "x": 0, "y": 1 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
       "fieldConfig": {
-        "defaults": { "unit": "short", "color": { "mode": "fixed", "fixedColor": "blue" } },
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          }
+        },
         "overrides": []
       },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value" },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
       "targets": [
         {
           "refId": "A",
@@ -63,13 +102,34 @@
     {
       "type": "stat",
       "title": "Output tokens",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 5, "w": 4, "x": 4, "y": 1 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
       "fieldConfig": {
-        "defaults": { "unit": "short", "color": { "mode": "fixed", "fixedColor": "green" } },
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
         "overrides": []
       },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value" },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
       "targets": [
         {
           "refId": "A",
@@ -81,10 +141,43 @@
     {
       "type": "stat",
       "title": "Model calls",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 5, "w": 4, "x": 8, "y": 1 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "purple"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
       "targets": [
         {
           "refId": "A",
@@ -96,10 +189,43 @@
     {
       "type": "stat",
       "title": "Tool calls",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 5, "w": 4, "x": 12, "y": 1 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "orange"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
       "targets": [
         {
           "refId": "A",
@@ -112,8 +238,16 @@
       "type": "stat",
       "title": "Tool failure rate",
       "description": "Share of github.copilot.tool.call.count with success = false.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 5, "w": 4, "x": 16, "y": 1 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
@@ -121,15 +255,31 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 0.05 },
-              { "color": "red", "value": 0.15 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.05
+              },
+              {
+                "color": "red",
+                "value": 0.15
+              }
             ]
           }
         },
         "overrides": []
       },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
       "targets": [
         {
           "refId": "A",
@@ -141,10 +291,43 @@
     {
       "type": "stat",
       "title": "Net lines changed",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 5, "w": 4, "x": 20, "y": 1 },
-      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
       "targets": [
         {
           "refId": "A",
@@ -157,16 +340,40 @@
       "type": "timeseries",
       "title": "Token throughput by model",
       "description": "Where the spend goes. Split by gen_ai.token.type so cache-heavy models are visible.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 6 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "custom": { "fillOpacity": 12, "lineWidth": 1, "showPoints": "never", "stacking": { "mode": "normal" } }
+          "custom": {
+            "fillOpacity": 12,
+            "lineWidth": 1,
+            "showPoints": "never",
+            "stacking": {
+              "mode": "normal"
+            }
+          }
         },
         "overrides": []
       },
-      "options": { "legend": { "displayMode": "table", "placement": "right", "calcs": ["sum"] } },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        }
+      },
       "targets": [
         {
           "refId": "A",
@@ -179,53 +386,99 @@
       "type": "timeseries",
       "title": "Model call latency",
       "description": "p50 / p95 / p99 of gen_ai.client.operation.duration for chat operations.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 6 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "custom": { "fillOpacity": 0, "lineWidth": 2, "showPoints": "never" }
+          "custom": {
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
         },
         "overrides": []
       },
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
       "targets": [
         {
           "refId": "A",
           "legendFormat": "p50",
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(gen_ai_client_operation_duration_seconds_bucket{gen_ai_operation_name=\"chat\", gen_ai_request_model=~\"$model\"}[$__rate_interval])))"
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(gen_ai_client_operation_duration_seconds_bucket{gen_ai_operation_name=\"chat\", gen_ai_request_model=~\"$model\"}[$__range])))",
+          "instant": false
         },
         {
           "refId": "B",
           "legendFormat": "p95",
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(gen_ai_client_operation_duration_seconds_bucket{gen_ai_operation_name=\"chat\", gen_ai_request_model=~\"$model\"}[$__rate_interval])))"
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(gen_ai_client_operation_duration_seconds_bucket{gen_ai_operation_name=\"chat\", gen_ai_request_model=~\"$model\"}[$__range])))",
+          "instant": false
         },
         {
           "refId": "C",
           "legendFormat": "p99",
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(gen_ai_client_operation_duration_seconds_bucket{gen_ai_operation_name=\"chat\", gen_ai_request_model=~\"$model\"}[$__rate_interval])))"
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(gen_ai_client_operation_duration_seconds_bucket{gen_ai_operation_name=\"chat\", gen_ai_request_model=~\"$model\"}[$__range])))",
+          "instant": false
         }
       ]
     },
     {
       "type": "row",
       "title": "Responsiveness",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 15 }
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      }
     },
     {
       "type": "timeseries",
       "title": "Time to first chunk (p95) by model",
       "description": "The number users actually feel. Streaming only.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "custom": { "fillOpacity": 0, "lineWidth": 2, "showPoints": "never" }
+          "custom": {
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
         },
         "overrides": []
       },
-      "options": { "legend": { "displayMode": "table", "placement": "right", "calcs": ["mean", "max"] } },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        }
+      },
       "targets": [
         {
           "refId": "A",
@@ -238,16 +491,37 @@
       "type": "timeseries",
       "title": "Agent invocation duration (p95) by agent",
       "description": "gen_ai.invoke_agent.duration covers a whole user turn, including subagents.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
-          "custom": { "fillOpacity": 0, "lineWidth": 2, "showPoints": "never" }
+          "custom": {
+            "fillOpacity": 0,
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
         },
         "overrides": []
       },
-      "options": { "legend": { "displayMode": "table", "placement": "right", "calcs": ["mean", "max"] } },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        }
+      },
       "targets": [
         {
           "refId": "A",
@@ -259,18 +533,41 @@
     {
       "type": "row",
       "title": "Tools and MCP",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 24 }
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      }
     },
     {
       "type": "barchart",
       "title": "Busiest tools",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 9, "w": 8, "x": 0, "y": 25 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 25
+      },
       "fieldConfig": {
-        "defaults": { "unit": "short", "custom": { "fillOpacity": 80 } },
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "fillOpacity": 80
+          }
+        },
         "overrides": []
       },
-      "options": { "orientation": "horizontal", "legend": { "showLegend": false } },
+      "options": {
+        "orientation": "horizontal",
+        "legend": {
+          "showLegend": false
+        }
+      },
       "targets": [
         {
           "refId": "A",
@@ -284,25 +581,68 @@
     {
       "type": "table",
       "title": "Tool latency and failures",
-      "description": "p95 duration per tool alongside its failure count. A slow tool and a failing tool need different fixes.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 9, "w": 10, "x": 8, "y": 25 },
+      "description": "p95 duration per tool alongside its failure count. A slow tool and a failing tool need different fixes. Tools with no calls in the window are filtered out, since a quantile over empty buckets is NaN.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 10,
+        "x": 8,
+        "y": 25
+      },
       "fieldConfig": {
-        "defaults": { "custom": { "align": "auto" } },
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          },
+          "noValue": "0"
+        },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "p95" },
-            "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 2 }]
+            "matcher": {
+              "id": "byName",
+              "options": "p95"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Failures"
+            },
+            "properties": [
+              {
+                "id": "noValue",
+                "value": "0"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
           }
         ]
       },
-      "options": { "showHeader": true },
+      "options": {
+        "showHeader": true
+      },
       "targets": [
         {
           "refId": "A",
           "format": "table",
           "instant": true,
-          "expr": "histogram_quantile(0.95, sum by (le, gen_ai_tool_name) (rate(github_copilot_tool_call_duration_seconds_bucket[$__rate_interval])))"
+          "expr": "histogram_quantile(0.95, sum by (le, gen_ai_tool_name) (increase(github_copilot_tool_call_duration_seconds_bucket[$__range]))) and on (gen_ai_tool_name) (sum by (gen_ai_tool_name) (increase(github_copilot_tool_call_duration_seconds_count[$__range])) > 0)"
         },
         {
           "refId": "B",
@@ -312,11 +652,20 @@
         }
       ],
       "transformations": [
-        { "id": "joinByField", "options": { "byField": "gen_ai_tool_name", "mode": "outer" } },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "gen_ai_tool_name",
+            "mode": "outer"
+          }
+        },
         {
           "id": "organize",
           "options": {
-            "excludeByName": { "Time 1": true, "Time 2": true },
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true
+            },
             "renameByName": {
               "gen_ai_tool_name": "Tool",
               "Value #A": "p95",
@@ -324,32 +673,85 @@
             }
           }
         },
-        { "id": "sortBy", "options": { "fields": {}, "sort": [{ "field": "p95", "desc": true }] } }
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "p95",
+                "desc": true
+              }
+            ]
+          }
+        }
       ]
     },
     {
       "type": "timeseries",
       "title": "MCP server connection outcomes",
       "description": "A rising failure line usually means a managed allowlist or a credential problem, not a flaky server.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 9, "w": 6, "x": 18, "y": 25 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 25
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "custom": { "fillOpacity": 20, "lineWidth": 1, "showPoints": "never", "stacking": { "mode": "normal" } }
+          "custom": {
+            "fillOpacity": 20,
+            "lineWidth": 1,
+            "showPoints": "never",
+            "stacking": {
+              "mode": "normal"
+            }
+          }
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "failure" },
-            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }]
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
           },
           {
-            "matcher": { "id": "byName", "options": "success" },
-            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
           }
         ]
       },
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
       "targets": [
         {
           "refId": "A",
@@ -361,22 +763,47 @@
     {
       "type": "row",
       "title": "Code impact",
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 34 }
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      }
     },
     {
       "type": "timeseries",
       "title": "Lines added and removed by model",
       "description": "Recorded in real time by the file-editing tools, so it reflects what the agent actually wrote rather than what was later committed.",
-      "datasource": { "type": "prometheus", "uid": "copilot-prometheus" },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 35 },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "copilot-prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
-          "custom": { "fillOpacity": 15, "lineWidth": 1, "showPoints": "never" }
+          "custom": {
+            "fillOpacity": 15,
+            "lineWidth": 1,
+            "showPoints": "never"
+          }
         },
         "overrides": []
       },
-      "options": { "legend": { "displayMode": "table", "placement": "right", "calcs": ["sum"] } },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean"
+          ]
+        }
+      },
       "targets": [
         {
           "refId": "A",
