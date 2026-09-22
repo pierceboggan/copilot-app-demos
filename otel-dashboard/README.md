@@ -4,9 +4,9 @@ Point Copilot at a collector, get a Grafana dashboard showing token spend, model
 
 ![Copilot agent overview dashboard](media/dashboard-overview.png)
 
-*Real data from a live run: Copilot app sessions and CLI runs across four models. Every number here came out of an actual collector, not a mockup.*
+*Real data from a live run: Copilot app sessions and CLI runs across five models. Every number here came out of an actual collector, not a mockup.*
 
-https://github.com/user-attachments/assets/c56ac4c5-f066-4558-aaed-abd31beaa1d8
+There is also a [16-second walkthrough of the whole dashboard](media/dashboard-walkthrough.mp4) if you want to see the rest of the rows.
 
 ## Run it
 
