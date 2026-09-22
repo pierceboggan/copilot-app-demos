@@ -1,0 +1,22 @@
+{
+  "model": "unmanaged",
+
+  "allowedMcpServers": [
+    { "serverUrl": "https://api.githubcopilot.com/*" },
+    { "serverCommand": ["npx", "@playwright/mcp@latest"] },
+    { "serverCommand": ["npx", "-y", "@modelcontextprotocol/server-memory"] },
+    { "serverUrl": "https://mcp.sentry.dev/*" }
+  ],
+
+  "extraKnownMarketplaces": {
+    "octo-experiments": {
+      "source": {
+        "source": "github",
+        "repo": "pierceboggan/copilot-app-demos",
+        "ref": "main",
+        "path": "enterprise-managed-settings/marketplace-experimental"
+      },
+      "autoUpdate": true
+    }
+  }
+}

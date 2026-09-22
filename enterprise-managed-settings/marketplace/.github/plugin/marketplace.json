@@ -1,0 +1,25 @@
+{
+  "name": "octo-internal",
+  "owner": {
+    "name": "Octo Industries Platform Engineering"
+  },
+  "metadata": {
+    "description": "Internal Copilot plugins for Octo Industries. Distributed to every engineer through enterprise-managed settings.",
+    "version": "1.0.0",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "octo-standards",
+      "source": "./octo-standards",
+      "description": "Octo Industries engineering standards: secure-by-default guidance and a pre-merge checklist.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Platform Engineering"
+      },
+      "license": "MIT",
+      "category": "engineering-standards",
+      "keywords": ["standards", "security", "review"]
+    }
+  ]
+}

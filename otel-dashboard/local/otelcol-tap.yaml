@@ -1,0 +1,51 @@
+# Zero-dependency OTLP "tap" for seeing exactly what Copilot emits.
+#
+# No Docker required. Run it with the standalone otelcol-contrib binary:
+#   ./scripts/run-tap.sh
+#
+# It listens on the same endpoint the demo managed-settings file points at
+# (http://127.0.0.1:4319), writes every signal to captured/*.jsonl, and prints
+# a readable summary to the terminal.
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 127.0.0.1:4319
+
+processors:
+  batch:
+    timeout: 1s
+
+exporters:
+  # Human-readable summary in the terminal.
+  debug:
+    verbosity: detailed
+    sampling_initial: 50
+    sampling_thereafter: 50
+
+  # Raw OTLP JSON, one line per batch. This is what the validation notes quote.
+  file/traces:
+    path: captured/traces.jsonl
+  file/metrics:
+    path: captured/metrics.jsonl
+  file/logs:
+    path: captured/logs.jsonl
+
+service:
+  telemetry:
+    logs:
+      level: info
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, file/traces]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, file/metrics]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, file/logs]

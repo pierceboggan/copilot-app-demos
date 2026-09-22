@@ -1,0 +1,6 @@
+{
+  "remoteControl": {
+    "mode": "requireSSO",
+    "githubDotComOrganizations": ["octo-industries"]
+  }
+}

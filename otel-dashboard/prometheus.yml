@@ -1,0 +1,15 @@
+# Scrapes the collector's Prometheus exporter. Copilot metrics are cumulative
+# histograms and counters, so a 15s interval keeps rate() windows honest
+# without much storage cost.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: copilot-collector
+    static_configs:
+      - targets: ["collector:8889"]
+
+  - job_name: collector-self
+    static_configs:
+      - targets: ["collector:8888"]

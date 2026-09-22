@@ -1,0 +1,523 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.version",
+            "value": {
+              "stringValue": "1.0.87-0"
+            }
+          },
+          {
+            "key": "agency.session_id",
+            "value": {
+              "stringValue": "REDACTED"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "github-copilot"
+            }
+          },
+          {
+            "key": "agency.run_kind",
+            "value": {
+              "stringValue": "user_session"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "github.copilot",
+            "version": "1.0.87-0"
+          },
+          "spans": [
+            {
+              "traceId": "REDACTED",
+              "flags": 257,
+              "name": "execute_tool tool_search_tool",
+              "kind": 1,
+              "startTimeUnixNano": "1790042357630000000",
+              "endTimeUnixNano": "1790042376254000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "tool_search_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.type",
+                  "value": {
+                    "stringValue": "function"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "github"
+                  }
+                }
+              ],
+              "status": {}
+            },
+            {
+              "traceId": "REDACTED",
+              "flags": 257,
+              "name": "execute_tool session_store_sql",
+              "kind": 1,
+              "startTimeUnixNano": "1790042357637000000",
+              "endTimeUnixNano": "1790042376271000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "session_store_sql"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.type",
+                  "value": {
+                    "stringValue": "function"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "github"
+                  }
+                },
+                {
+                  "key": "error.type",
+                  "value": {
+                    "stringValue": "ToolError"
+                  }
+                }
+              ],
+              "events": [
+                {
+                  "timeUnixNano": "1790042376271000000",
+                  "name": "gen_ai.client.operation.exception",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.error_code",
+                      "value": {
+                        "stringValue": "failure"
+                      }
+                    },
+                    {
+                      "key": "exception.type",
+                      "value": {
+                        "stringValue": "ToolError"
+                      }
+                    },
+                    {
+                      "key": "exception.message",
+                      "value": {
+                        "stringValue": "Tool failed"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "status": {
+                "message": "Tool failed",
+                "code": 2
+              }
+            },
+            {
+              "traceId": "REDACTED",
+              "flags": 257,
+              "name": "chat claude-opus-5",
+              "kind": 3,
+              "startTimeUnixNano": "1790042349855000000",
+              "endTimeUnixNano": "1790042376322000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "github"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "claude-opus-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.stream",
+                  "value": {
+                    "boolValue": true
+                  }
+                },
+                {
+                  "key": "gen_ai.request.reasoning.level",
+                  "value": {
+                    "stringValue": "high"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_calls"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "83647"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "637"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read.input_tokens",
+                  "value": {
+                    "intValue": "74296"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_write.input_tokens",
+                  "value": {
+                    "intValue": "9349"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.reasoning.output_tokens",
+                  "value": {
+                    "intValue": "255"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "claude-opus-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "github.copilot.service_request_id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "github.copilot.cost",
+                  "value": {
+                    "doubleValue": 15
+                  }
+                },
+                {
+                  "key": "github.copilot.nano_aiu",
+                  "value": {
+                    "doubleValue": 11151425000
+                  }
+                },
+                {
+                  "key": "github.copilot.server_duration",
+                  "value": {
+                    "doubleValue": 7683
+                  }
+                },
+                {
+                  "key": "github.copilot.initiator",
+                  "value": {
+                    "stringValue": "agent"
+                  }
+                },
+                {
+                  "key": "github.copilot.turn_id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "github.copilot.interaction_id",
+                  "value": {
+                    "stringValue": "REDACTED"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.time_to_first_chunk",
+                  "value": {
+                    "doubleValue": 3.712653375
+                  }
+                }
+              ],
+              "events": [
+                {
+                  "timeUnixNano": "1790042349872000000",
+                  "name": "github.copilot.session.usage_info",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.token_limit",
+                      "value": {
+                        "intValue": "936000"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.current_tokens",
+                      "value": {
+                        "intValue": "57941"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.messages_length",
+                      "value": {
+                        "intValue": "16"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "timeUnixNano": "1790042357646000000",
+                  "name": "github.copilot.hook.start",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.hook.type",
+                      "value": {
+                        "stringValue": "preToolUse"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.invocation_id",
+                      "value": {
+                        "stringValue": "REDACTED"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.tool_names",
+                      "value": {
+                        "stringValue": "[\"tool_search_tool\",\"session_store_sql\"]"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "timeUnixNano": "1790042357647000000",
+                  "name": "github.copilot.hook.end",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.hook.type",
+                      "value": {
+                        "stringValue": "preToolUse"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.invocation_id",
+                      "value": {
+                        "stringValue": "REDACTED"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.tool_names",
+                      "value": {
+                        "stringValue": "[\"tool_search_tool\",\"session_store_sql\"]"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.decision",
+                      "value": {
+                        "stringValue": "allow"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.duration",
+                      "value": {
+                        "doubleValue": 0.001193166
+                      }
+                    }
+                  ]
+                },
+                {
+                  "timeUnixNano": "1790042376139000000",
+                  "name": "github.copilot.hook.start",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.hook.type",
+                      "value": {
+                        "stringValue": "postToolUse"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.invocation_id",
+                      "value": {
+                        "stringValue": "REDACTED"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.tool_names",
+                      "value": {
+                        "stringValue": "[\"tool_search_tool\"]"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "timeUnixNano": "1790042376250000000",
+                  "name": "github.copilot.hook.end",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.hook.type",
+                      "value": {
+                        "stringValue": "postToolUse"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.invocation_id",
+                      "value": {
+                        "stringValue": "REDACTED"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.tool_names",
+                      "value": {
+                        "stringValue": "[\"tool_search_tool\"]"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.decision",
+                      "value": {
+                        "stringValue": "allow"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.duration",
+                      "value": {
+                        "doubleValue": 0.1102775
+                      }
+                    }
+                  ]
+                },
+                {
+                  "timeUnixNano": "1790042376268000000",
+                  "name": "github.copilot.hook.start",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.hook.type",
+                      "value": {
+                        "stringValue": "postToolUseFailure"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.invocation_id",
+                      "value": {
+                        "stringValue": "REDACTED"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.tool_names",
+                      "value": {
+                        "stringValue": "[\"session_store_sql\"]"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "timeUnixNano": "1790042376268000000",
+                  "name": "github.copilot.hook.end",
+                  "attributes": [
+                    {
+                      "key": "github.copilot.hook.type",
+                      "value": {
+                        "stringValue": "postToolUseFailure"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.invocation_id",
+                      "value": {
+                        "stringValue": "REDACTED"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.tool_names",
+                      "value": {
+                        "stringValue": "[\"session_store_sql\"]"
+                      }
+                    },
+                    {
+                      "key": "github.copilot.hook.duration",
+                      "value": {
+                        "doubleValue": 0.000101875
+                      }
+                    }
+                  ]
+                }
+              ],
+              "status": {}
+            }
+          ]
+        }
+      ],
+      "schemaUrl": "https://opentelemetry.io/schemas/1.44.0"
+    }
+  ]
+}

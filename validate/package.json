@@ -1,0 +1,14 @@
+{
+  "name": "copilot-managed-settings-validator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Prints the enterprise managed settings the Copilot runtime actually resolved, so you can check a managed-settings.json against what the client enforces.",
+  "scripts": {
+    "validate": "node validate-managed-settings.mjs",
+    "enforce": "node probe-enforcement.mjs"
+  },
+  "dependencies": {
+    "@github/copilot-sdk": "^1.0.14"
+  }
+}

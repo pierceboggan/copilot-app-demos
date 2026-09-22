@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "octo-standards",
+  "version": "1.0.0",
+  "description": "Octo Industries engineering standards: secure-by-default guidance and a pre-merge checklist.",
+  "author": {
+    "name": "Octo Industries Platform Engineering"
+  },
+  "license": "MIT",
+  "keywords": ["standards", "security", "review"]
+}

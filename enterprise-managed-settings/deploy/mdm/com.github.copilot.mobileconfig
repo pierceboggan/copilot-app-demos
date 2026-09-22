@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS MDM delivery for Copilot enterprise managed settings.
+
+  Native MDM delivery does not ship a managed-settings.json file. It writes the
+  same logical keys into forced managed preferences for the `com.github.copilot`
+  preference domain. Every value must be a *string*: nested keys use dot
+  notation, and booleans, arrays, and objects are stored as JSON text inside a
+  string.
+
+  Upload this to Jamf, Intune, Kandji, or any MDM that accepts a .mobileconfig.
+  Delivered policy lands in:
+    /Library/Managed Preferences/USERNAME/com.github.copilot.plist
+
+  MDM sits above server-managed and file-based settings in the precedence
+  order, so use it for the restrictions IT owns outright.
+-->
+<plist version="1.0">
+<dict>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+  <key>PayloadIdentifier</key>
+  <string>com.octo-industries.copilot.managed-settings</string>
+  <key>PayloadUUID</key>
+  <string>3F2A1C08-5C1B-4A6E-9E2D-7B4C1A0D6E11</string>
+  <key>PayloadDisplayName</key>
+  <string>GitHub Copilot - enterprise managed settings</string>
+  <key>PayloadDescription</key>
+  <string>Baseline Copilot governance for Octo Industries.</string>
+  <key>PayloadOrganization</key>
+  <string>Octo Industries</string>
+  <key>PayloadScope</key>
+  <string>System</string>
+
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>PayloadType</key>
+      <string>com.apple.ManagedClient.preferences</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+      <key>PayloadIdentifier</key>
+      <string>com.octo-industries.copilot.managed-settings.payload</string>
+      <key>PayloadUUID</key>
+      <string>9D5E7B2A-1F44-4C93-B0A7-2E8F6C3D5A22</string>
+      <key>PayloadDisplayName</key>
+      <string>GitHub Copilot managed preferences</string>
+
+      <key>PayloadContent</key>
+      <dict>
+        <key>com.github.copilot</key>
+        <dict>
+          <key>Forced</key>
+          <array>
+            <dict>
+              <key>mcx_preference_settings</key>
+              <dict>
+
+                <!-- Plain string value. -->
+                <key>model</key>
+                <string>auto</string>
+
+                <!-- Nested key, dot-separated. -->
+                <key>permissions.disableBypassPermissionsMode</key>
+                <string>disable</string>
+
+                <!-- Array value, JSON-encoded inside a string. -->
+                <key>permissions.deny</key>
+                <string>["Shell(rm -rf *)","Read(~/.ssh/**)","Edit(//etc/**)"]</string>
+
+                <key>permissions.ask</key>
+                <string>["Shell(git push *)","Shell(terraform apply *)"]</string>
+
+                <!-- Object value, JSON-encoded inside a string. -->
+                <key>telemetry</key>
+                <string>{"enabled":true,"endpoint":"https://otel-collector.octo-industries.example","protocol":"http/protobuf","captureContent":false,"lockCaptureContent":true,"serviceName":"github-copilot"}</string>
+
+                <key>remoteControl</key>
+                <string>{"mode":"requireSSO","githubDotComOrganizations":["octo-industries"]}</string>
+
+                <key>allowedMcpServers</key>
+                <string>[{"serverUrl":"https://api.githubcopilot.com/*"}]</string>
+
+                <!-- Booleans are strings too. -->
+                <key>sandbox.enabled</key>
+                <string>true</string>
+
+                <key>sandbox.allowBypass</key>
+                <string>false</string>
+
+              </dict>
+            </dict>
+          </array>
+        </dict>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>

@@ -1,0 +1,39 @@
+Windows Registry Editor Version 5.00
+
+; Windows MDM / Group Policy delivery for Copilot enterprise managed settings.
+;
+; Native MDM delivery does not ship a managed-settings.json file. It writes the
+; same logical keys as string (REG_SZ) values under:
+;
+;   HKEY_LOCAL_MACHINE\SOFTWARE\Policies\GitHubCopilot
+;
+; Every value is a string. Nested keys use dot notation, and booleans, arrays,
+; and objects are stored as JSON text inside the string. Backslashes and quotes
+; must be escaped for .reg syntax, which is why the JSON below looks noisy.
+;
+; Ship this through Intune (Administrative Templates / a custom OMA-URI policy),
+; Group Policy Preferences, or your configuration-management tool of choice.
+;
+; MDM sits above server-managed and file-based settings in the precedence order,
+; so use it for the restrictions IT owns outright.
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\GitHubCopilot]
+
+; Plain string value.
+"model"="auto"
+
+; Nested key, dot-separated.
+"permissions.disableBypassPermissionsMode"="disable"
+
+; Array value, JSON-encoded inside a string.
+"permissions.deny"="[\"Shell(rm -rf *)\",\"Read(~/.ssh/**)\",\"Edit(//etc/**)\"]"
+"permissions.ask"="[\"Shell(git push *)\",\"Shell(terraform apply *)\"]"
+
+; Object value, JSON-encoded inside a string.
+"telemetry"="{\"enabled\":true,\"endpoint\":\"https://otel-collector.octo-industries.example\",\"protocol\":\"http/protobuf\",\"captureContent\":false,\"lockCaptureContent\":true,\"serviceName\":\"github-copilot\"}"
+"remoteControl"="{\"mode\":\"requireSSO\",\"githubDotComOrganizations\":[\"octo-industries\"]}"
+"allowedMcpServers"="[{\"serverUrl\":\"https://api.githubcopilot.com/*\"}]"
+
+; Booleans are strings too.
+"sandbox.enabled"="true"
+"sandbox.allowBypass"="false"

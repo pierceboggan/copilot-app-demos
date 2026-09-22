@@ -1,0 +1,114 @@
+{
+  "model": { "overridable": "auto" },
+
+  "permissions": {
+    "disableBypassPermissionsMode": { "overridable": "disable" },
+    "deny": [
+      "Shell(rm -rf *)",
+      "Shell(curl * | sh)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Edit(//etc/**)",
+      "Domain(*.pastebin.com)"
+    ],
+    "ask": {
+      "overridable": [
+        "Shell(git push *)",
+        "Shell(gh pr merge *)",
+        "Shell(terraform apply *)",
+        "Edit(//Users/**/.zshrc)"
+      ]
+    },
+    "allow": {
+      "overridable": [
+        "Shell(npm test *)",
+        "Shell(npm run lint *)",
+        "Shell(git status)",
+        "Shell(git diff *)",
+        "Read(/src/**)",
+        "Domain(registry.npmjs.org)",
+        "Domain(api.github.com)"
+      ]
+    }
+  },
+
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "http://127.0.0.1:4319",
+    "protocol": "http/protobuf",
+    "captureContent": false,
+    "lockCaptureContent": true,
+    "serviceName": "github-copilot",
+    "resourceAttributes": {
+      "deployment.environment": "demo",
+      "octo.business_unit": "platform-engineering"
+    }
+  },
+
+  "extraKnownMarketplaces": {
+    "octo-internal": {
+      "source": {
+        "source": "github",
+        "repo": "pierceboggan/copilot-app-demos",
+        "ref": "main",
+        "path": "enterprise-managed-settings/marketplace"
+      },
+      "autoUpdate": true
+    }
+  },
+
+  "strictKnownMarketplaces": [
+    {
+      "source": "github",
+      "repo": "pierceboggan/copilot-app-demos"
+    }
+  ],
+
+  "enabledPlugins": {
+    "octo-standards@octo-internal": true
+  },
+
+  "allowedMcpServers": {
+    "overridable": [
+      { "serverUrl": "https://api.githubcopilot.com/*" },
+      { "serverCommand": ["npx", "@playwright/mcp@latest"] }
+    ]
+  },
+
+  "deniedMcpServers": [
+    {
+      "serverCommand": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/"
+      ]
+    }
+  ],
+
+  "remoteControl": {
+    "mode": "requireSSO",
+    "githubDotComOrganizations": ["octo-industries"]
+  },
+
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowBypass": false,
+    "sandboxMcpServers": true,
+    "sandboxLspServers": true,
+    "allowDevToolAccess": false,
+    "userPolicy": {
+      "filesystem": {
+        "deniedPaths": ["/Users/shared/secrets", "/etc/ssl/private"]
+      },
+      "network": {
+        "allowOutbound": true,
+        "allowLocalNetwork": false
+      },
+      "seatbelt": {
+        "keychainAccess": false
+      }
+    }
+  }
+}

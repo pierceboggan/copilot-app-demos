@@ -1,0 +1,9 @@
+{
+  "allowedMcpServers": [
+    { "serverUrl": "https://api.githubcopilot.com/*" },
+    { "serverCommand": ["npx", "@playwright/mcp@latest"] }
+  ],
+  "deniedMcpServers": [
+    { "serverCommand": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/"] }
+  ]
+}

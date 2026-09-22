@@ -1,0 +1,17 @@
+{
+  "model": "claude-sonnet-5",
+
+  "permissions": {
+    "ask": [
+      "Shell(git push *)",
+      "Shell(gh pr merge *)",
+      "Shell(terraform apply *)",
+      "Shell(npm publish *)",
+      "Shell(kubectl *)",
+      "Edit(/src/**)"
+    ],
+    "allow": ["Shell(npm test *)", "Shell(git status)", "Shell(git diff *)"]
+  },
+
+  "allowedMcpServers": [{ "serverUrl": "https://api.githubcopilot.com/*" }]
+}

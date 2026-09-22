@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+
+# The local OTLP tap downloads a ~350 MB collector binary and writes raw
+# captures that contain real session identifiers and file paths.
+otel-dashboard/local/otelcol-contrib
+otel-dashboard/local/otelcol.tar.gz
+otel-dashboard/local/captured/
+
+# Scratch output from the validators.
+validate/resolved.json
+validate/probe-tmp.mjs

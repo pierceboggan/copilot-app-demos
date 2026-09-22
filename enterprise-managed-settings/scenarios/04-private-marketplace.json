@@ -1,0 +1,19 @@
+{
+  "extraKnownMarketplaces": {
+    "octo-internal": {
+      "source": {
+        "source": "github",
+        "repo": "pierceboggan/copilot-app-demos",
+        "ref": "main",
+        "path": "enterprise-managed-settings/marketplace"
+      },
+      "autoUpdate": true
+    }
+  },
+  "strictKnownMarketplaces": [
+    { "source": "github", "repo": "pierceboggan/copilot-app-demos" }
+  ],
+  "enabledPlugins": {
+    "octo-standards@octo-internal": true
+  }
+}

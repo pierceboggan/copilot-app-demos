@@ -1,0 +1,13 @@
+{
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "http://127.0.0.1:4319",
+    "protocol": "http/protobuf",
+    "captureContent": false,
+    "lockCaptureContent": true,
+    "serviceName": "github-copilot",
+    "resourceAttributes": {
+      "deployment.environment": "demo"
+    }
+  }
+}

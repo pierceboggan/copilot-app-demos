@@ -1,0 +1,4 @@
+{
+  "ai-pioneers.json": ["ai-pioneers"],
+  "regulated.json": ["payments-platform", "identity-core"]
+}
