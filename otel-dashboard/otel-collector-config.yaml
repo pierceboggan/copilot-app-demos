@@ -27,6 +27,22 @@ processors:
     limit_percentage: 75
     spike_limit_percentage: 20
 
+  # Cardinality guard, metrics only.
+  #
+  # `resource_to_telemetry_conversion` on the Prometheus exporter promotes every
+  # resource attribute to a label, which is what makes `service.version`
+  # available for filtering. It also promotes `agency.session_id`, a fresh UUID
+  # per Copilot session, and that produces a brand new time series for every
+  # metric on every session. Seven sessions from one laptop already generate 529
+  # series; an enterprise would take Prometheus down within days.
+  #
+  # Traces keep the attribute. Correlating spans to a session is exactly what it
+  # is for, and high cardinality is normal and cheap there.
+  resource/metrics_cardinality:
+    attributes:
+      - key: agency.session_id
+        action: delete
+
   # Copilot stamps prompts and tool arguments onto spans only when
   # `captureContent` is true. If you ever turn that on, this is where you would
   # scrub. Left commented so the default pipeline stays lossless.
@@ -58,7 +74,7 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [memory_limiter, batch]
+      processors: [memory_limiter, resource/metrics_cardinality, batch]
       exporters: [prometheus, debug]
     traces:
       receivers: [otlp]

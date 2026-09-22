@@ -182,6 +182,8 @@ Present in real telemetry, absent from the reference. Useful, but treat as unsta
 
 These are genuinely useful. `agency.session_id` is the only clean way to separate app traffic from CLI traffic in a shared collector.
 
+It is also a trap on the metrics side. If your Prometheus exporter uses `resource_to_telemetry_conversion`, the attribute becomes a label, and since it is a fresh UUID per session every session mints a new time series for every metric. Measured on one laptop: seven sessions produced 529 series, and three batches produced 1,538 series with the attribute versus 1,167 without. Drop it from the metrics pipeline and keep it on traces.
+
 **Span attributes**
 
 On `chat`: `gen_ai.usage.reasoning.output_tokens`, `gen_ai.request.reasoning.level`, `gen_ai.request.previous_response.id`, `github.copilot.service_request_id`.

@@ -79,6 +79,8 @@ Every query in the dashboard uses metric and label names taken from a live captu
 
 Note what happens to units. A real unit like `s` becomes a `_seconds` suffix. An annotation-only unit like `{token}` or `{call}` disappears, except that counters still pick up `_total`. Labels get dots swapped for underscores, so `gen_ai.request.model` is queried as `gen_ai_request_model`.
 
+Resource attributes only become labels because the exporter sets `resource_to_telemetry_conversion`. That is what supplies `service_version` for the client-version filter, and it is also why the config has to drop `agency.session_id` before it reaches Prometheus. See [Cost and cardinality](#cost-and-cardinality).
+
 One documented attribute does not exist: the reference names `gen_ai.usage.cache_creation.input_tokens`, but the runtime emits `gen_ai.usage.cache_write.input_tokens`. See [VALIDATION.md](../enterprise-managed-settings/VALIDATION.md#documentation-discrepancies).
 
 ## Sending it somewhere other than Grafana
@@ -131,9 +133,25 @@ You can also skip the collector entirely and point `telemetry.endpoint` at any O
 
 If you do need it, set `lockCaptureContent: true` so developers cannot toggle it locally, and uncomment the `redaction` processor in `otel-collector-config.yaml` as a second line of defence.
 
-## Cost
+## Cost and cardinality
 
-A busy developer produces a lot of spans, and most of them are not interesting. The `session.timing.*` family alone was over half the spans in my capture. If you pay per span, drop them at the collector:
+Two things will bite you at scale, and both are handled in the shipped config.
+
+**Session ID as a metric label.** The Prometheus exporter runs with `resource_to_telemetry_conversion` enabled, which is what makes `service.version` available for the client-version filter. It also promotes `agency.session_id`, a fresh UUID per Copilot session, which means every session mints a brand new time series for every metric. Measured on a single laptop: seven sessions produced 529 series, and three captured batches produced 1,538 series without the guard versus 1,167 with it. Left alone, that grows without bound.
+
+The metrics pipeline therefore drops the attribute:
+
+```yaml
+processors:
+  resource/metrics_cardinality:
+    attributes:
+      - key: agency.session_id
+        action: delete
+```
+
+Traces keep it. Correlating spans back to a session is exactly what it is for, and high cardinality is normal and cheap in a trace store. If you need per-session *metrics*, derive them from traces in Tempo rather than turning this off.
+
+**Span volume.** A busy developer produces a lot of spans, and most are not interesting. The `session.timing.*` family alone was over half the spans in my capture. If you pay per span, drop them at the collector:
 
 ```yaml
 processors:
